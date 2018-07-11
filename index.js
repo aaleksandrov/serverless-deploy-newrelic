@@ -30,10 +30,6 @@ class DeployNewRelicPlugin {
       }
     };
     this.serverless.cli.log('Recording new deployment');
-    this.serverless.cli.log('App id ');
-    this.serverless.cli.log(this.applicationId);
-    this.serverless.cli.log('adminApiKey');
-    this.serverless.cli.log(this.adminApiKey);
     const postData = JSON.stringify({
       deployment : {
         revision: 'blah',
