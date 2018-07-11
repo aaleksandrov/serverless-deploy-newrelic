@@ -1,17 +1,10 @@
 'use strict';
 const https = require('https');
 
-class DeployNewRelicPluginError extends Error {}
-
 class DeployNewRelicPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-    this.applicationId = this.serverless.service.custom['serverless-deploy-newrlic'].application_id;
-    this.adminApiKey = this.serverless.service.custom['serverless-deploy-newrlic'].admin_api_key;
-    if (!this.applicationId || !this.adminApiKey) {
-      throw new DeployNewRelicPluginError('applicationId and adminApiKey must be defined');
-    }
 
     this.hooks = {
       'after:deploy:deploy': this.callNewRelic.bind(this),
@@ -19,17 +12,23 @@ class DeployNewRelicPlugin {
   }
 
   callNewRelic() {
+    const applicationId = this.serverless.service.custom['serverless-deploy-newrlic'].application_id;
+    const adminApiKey = this.serverless.service.custom['serverless-deploy-newrlic'].admin_api_key;
+    if (!applicationId || !adminApiKey) {
+      this.serverless.cli.warn('application_id and admin_api_key must be defined');
+      return;
+    }
+
     const options = {
       hostname: 'api.newrelic.com',
       port: 443,
-      path: `/v2/applications/${this.applicationId}/deployments.json`,
+      path: `/v2/applications/${applicationId}/deployments.json`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key' : this.adminApiKey,
+        'X-Api-Key' : adminApiKey,
       }
     };
-    this.serverless.cli.log('Recording new deployment');
     const postData = JSON.stringify({
       deployment : {
         revision: 'blah',
