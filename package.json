@@ -1,8 +1,8 @@
 {
-  "name": "rps-portal-menu-service",
-  "version": "0.1.0",
+  "name": "sls-newrelic",
+  "version": "0.1.1",
   "main": "index.js",
-  "repository": "git@github.com:deliveryhero/rps-portal-menu-service.git",
+  "repository": "git@github.com:aaleksandrov/sls-newrelic.git",
   "author": "rps",
   "license": "UNLICENSED",
   "private": false,
