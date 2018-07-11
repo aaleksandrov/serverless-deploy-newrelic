@@ -14,6 +14,10 @@ class DeployNewRelicPlugin {
   callNewRelic() {
     const applicationId = this.serverless.service.custom['serverless-deploy-newrlic'].application_id;
     const adminApiKey = this.serverless.service.custom['serverless-deploy-newrlic'].admin_api_key;
+    const revision = this.serverless.service.custom['serverless-deploy-newrlic'].revision || 'no revision-specified';
+    const description = this.serverless.service.custom['serverless-deploy-newrlic'].description || '';
+    const changelog = this.serverless.service.custom['serverless-deploy-newrlic'].changelog || '';
+    const user = this.serverless.service.custom['serverless-deploy-newrlic'].user || '';
     if (!applicationId || !adminApiKey) {
       this.serverless.cli.warn('application_id and admin_api_key must be defined');
       return;
@@ -31,8 +35,10 @@ class DeployNewRelicPlugin {
     };
     const postData = JSON.stringify({
       deployment : {
-        revision: 'blah',
-        description: "some description",
+        revision: revision,
+        description: description,
+        changelog: changelog,
+        user: user,
       },
     });
     const req = https.request(options, (res) => {
