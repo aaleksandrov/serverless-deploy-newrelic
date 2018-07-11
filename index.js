@@ -5,7 +5,6 @@ class DeployNewRelicPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
-
     this.hooks = {
       'after:deploy:deploy': this.callNewRelic.bind(this),
     };
@@ -14,10 +13,10 @@ class DeployNewRelicPlugin {
   callNewRelic() {
     const applicationId = this.serverless.service.custom['serverless-deploy-newrlic'].application_id;
     const adminApiKey = this.serverless.service.custom['serverless-deploy-newrlic'].admin_api_key;
-    const revision = this.serverless.service.custom['serverless-deploy-newrlic'].revision || 'no revision-specified';
-    const description = this.serverless.service.custom['serverless-deploy-newrlic'].description || '';
-    const changelog = this.serverless.service.custom['serverless-deploy-newrlic'].changelog || '';
     const user = this.serverless.service.custom['serverless-deploy-newrlic'].user || '';
+    const revision = this.options['new-relic-revision'] || 'no-revision-specified';
+    const description = this.options['new-relic-release-description'] || '';
+    const changelog = this.options['new-relic-release-changelog'] || '';
     if (!applicationId || !adminApiKey) {
       this.serverless.cli.warn('application_id and admin_api_key must be defined');
       return;
